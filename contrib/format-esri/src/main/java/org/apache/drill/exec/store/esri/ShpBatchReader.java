@@ -37,7 +37,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.FileSplit;
 import org.jamel.dbf.DbfReader;
 import org.jamel.dbf.structure.DbfField;
-import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,7 +59,7 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
   private FileSplit split;
   private ResultSetLoader loader;
-  private final ShpReaderConfig readerConfig;
+//  private final ShpReaderConfig readerConfig;
   private Path hadoopShp;
   private Path hadoopDbf;
   private Path hadoopPrj;
@@ -86,7 +86,7 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
   }
 
   public ShpBatchReader(ShpReaderConfig readerConfig, int maxRecords) {
-    this.readerConfig = readerConfig;
+//    this.readerConfig = readerConfig;
     this.maxRecords = maxRecords;
   }
 
@@ -288,7 +288,7 @@ public class ShpBatchReader implements ManagedReader<FileSchemaNegotiator> {
 
   private void writeTimeColumn(TupleWriter rowWriter, String name, long value) {
     int index = rowWriter.tupleSchema().index(name);
-    Instant instant = new Instant(value);
+    Instant instant = Instant.ofEpochMilli(value);
     if (index == -1) {
       ColumnMetadata colSchema = MetadataUtils.newScalar(name, TypeProtos.MinorType.INT, TypeProtos.DataMode.OPTIONAL);
       index = rowWriter.addColumn(colSchema);
